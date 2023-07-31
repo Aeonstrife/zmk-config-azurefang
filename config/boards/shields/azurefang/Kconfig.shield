@@ -1,0 +1,6 @@
+config SHIELD_AZUREFANG
+    def_bool $(shields_list_contains, azurefang)
+
+# Turn on logging, and set ZMK logging to debug output
+CONFIG_ZMK_USB_LOGGING=y
+CONFIG_ZMK_KSCAN_DIRECT_POLLING=y
