@@ -49,7 +49,7 @@ K_MSGQ_DEFINE(led_msgq, sizeof(struct blink_item), 16, 4);
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
 static int led_profile_listener_cb(const zmk_event_t *eh) {
     uint8_t profile_index = zmk_ble_active_profile_index();
-    struct blink_item blink = {.duration_ms = CONFIG_RGBLED_WIDGET_OUTPUT_BLINK_MS};
+    struct blink_item blink = {.duration_ms = 1000};
     if (zmk_ble_active_profile_is_connected()) {
         LOG_INF("Profile %d connected, blinking blue", profile_index);
         blink.color = LED_BLUE;
@@ -69,7 +69,7 @@ ZMK_LISTENER(led_profile_listener, led_profile_listener_cb);
 ZMK_SUBSCRIPTION(led_profile_listener, zmk_ble_active_profile_changed);
 #else
 static int led_peripheral_listener_cb(const zmk_event_t *eh) {
-    struct blink_item blink = {.duration_ms = CONFIG_RGBLED_WIDGET_OUTPUT_BLINK_MS};
+    struct blink_item blink = {.duration_ms = 1000};
     if (zmk_split_bt_peripheral_is_connected()) {
         LOG_INF("Peripheral connected, blinking blue");
         blink.color = LED_BLUE;
@@ -92,10 +92,10 @@ static int led_battery_listener_cb(const zmk_event_t *eh) {
     // check if we are in critical battery levels at state change, blink if we are
     uint8_t battery_level = bt_bas_get_battery_level();
 
-    if (battery_level <= CONFIG_RGBLED_WIDGET_BATTERY_LEVEL_CRITICAL) {
+    if (battery_level <= 5) {
         LOG_INF("Battery level %d, blinking red for critical", battery_level);
 
-        struct blink_item blink = {.duration_ms = CONFIG_RGBLED_WIDGET_BATTERY_BLINK_MS,
+        struct blink_item blink = {.duration_ms = 2000,
                                    .color = LED_RED};
         k_msgq_put(&led_msgq, &blink, K_NO_WAIT);
     }
@@ -114,13 +114,13 @@ extern void led_thread(void *d0, void *d1, void *d2) {
 
 #if IS_ENABLED(CONFIG_ZMK_BATTERY_REPORTING)
     // check and indicate battery level on thread start
-    struct blink_item blink = {.duration_ms = CONFIG_RGBLED_WIDGET_BATTERY_BLINK_MS};
+    struct blink_item blink = {.duration_ms = 2000};
     uint8_t battery_level = bt_bas_get_battery_level();
 
-    if (battery_level >= CONFIG_RGBLED_WIDGET_BATTERY_LEVEL_HIGH) {
+    if (battery_level >= 80) {
         LOG_INF("Battery level %d, blinking green", battery_level);
         blink.color = LED_GREEN;
-    } else if (battery_level >= CONFIG_RGBLED_WIDGET_BATTERY_LEVEL_LOW) {
+    } else if (battery_level >= 20) {
         LOG_INF("Battery level %d, blinking yellow", battery_level);
         blink.color = LED_YELLOW;
     } else {
@@ -155,7 +155,7 @@ extern void led_thread(void *d0, void *d1, void *d2) {
         }
 
         // wait interval before processing another blink
-        k_sleep(K_MSEC(CONFIG_RGBLED_WIDGET_INTERVAL_MS));
+        k_sleep(K_MSEC(500));
     }
 }
 
