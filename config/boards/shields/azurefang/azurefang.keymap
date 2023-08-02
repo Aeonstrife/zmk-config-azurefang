@@ -22,8 +22,8 @@
 		ble_layer {
 			label = "BLE";
             bindings = <
-            &bootloader   &kp UP   &trans
-            &kp RIGHT   &kp DOWN   &kp LEFT   &kp C_MUTE
+            &bootloader   &out OUT_TOG   &trans
+            &bt BT_PRV   &bt BT_NXT   &bt BT_CLR   &kp C_MUTE
             >;
 			
 			sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
