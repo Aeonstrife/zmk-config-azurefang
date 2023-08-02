@@ -1,5 +1,8 @@
 if SHIELD_AZUREFANG
 
+config ZMK_KEYBOARD_NAME
+    default "azurefang"
+
 config LED
     default y
 
