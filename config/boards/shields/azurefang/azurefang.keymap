@@ -23,7 +23,7 @@
 			label = "BLE";
             bindings = <
             &bootloader   &kp UP   &trans
-            &kp LEFT   &kp DOWN   &kp RIGHT   &kp C_MUTE
+            &kp RIGHT   &kp DOWN   &kp LEFT   &kp C_MUTE
             >;
 			
 			sensor-bindings = <&inc_dec_kp PG_UP PG_DN>;
