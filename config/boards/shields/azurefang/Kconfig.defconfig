@@ -6,6 +6,9 @@ config ZMK_KEYBOARD_NAME
 config LED
     default y
 
+config CONFIG_ZMK_SLEEP
+    default y
+
 config AZUREFANG_BATTERY_BLINK_MS
     int "Duration of battery level blink in ms"
     default 2000
